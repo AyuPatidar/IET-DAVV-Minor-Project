@@ -1,19 +1,25 @@
-import express from "express";
-const { default: connectToDB } = require("./config/db");
-import { userRoutes } from "./routes/userRoutes";
+const express = require("express");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const cors = require("cors");
 require("dotenv").config();
 
+const userRoutes = require("./routes/userRoutes.js");
+
 const app = express();
-app.use(express.json());
 
-app.use("api/v1/user/", userRoutes);
+app.use(bodyParser.json({ limit: "30mb", extended: true }));
+app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
+app.use(cors());
 
-PORT = process.env.PORT || 3000;
+app.use("/api/v1/user/", userRoutes);
 
-connectToDB
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server is running on PORT ${PORT}`);
-    });
+mongoose
+  .connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
   })
-  .catch((error) => console.error(`Error connecting to Database: ${error}`));
+  .then(() =>
+    app.listen(3000, () => console.log(`Server Running on Port ${3000}`))
+  )
+  .catch((error) => console.log(`${error} did not connect`));

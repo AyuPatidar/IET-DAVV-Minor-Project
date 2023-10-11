@@ -1,12 +1,10 @@
-import mongoose from "mongoose";
-
-import User from "../models/user";
-
-const epress = require("express");
+const express = require("express");
+const mongoose = require("mongoose");
+const User = require("../models/user");
 
 const router = express.Router();
 
-export const getUser = async (req, res) => {
+const getUser = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -18,7 +16,7 @@ export const getUser = async (req, res) => {
   }
 };
 
-export const createUser = async (req, res) => {
+const createUser = async (req, res) => {
   const { name, username, email, phoneNumber, address } = req.body;
 
   const newUser = new User({ name, username, email, phoneNumber, address });
@@ -32,7 +30,7 @@ export const createUser = async (req, res) => {
   }
 };
 
-export const updateUser = async (req, res) => {
+const updateUser = async (req, res) => {
   const { id } = req.params;
   const { name, username, email, phoneNumber, address } = req.body;
 
@@ -50,18 +48,18 @@ export const updateUser = async (req, res) => {
   }
 };
 
-export const deleteUser = async (req, res) => {
+const deleteUser = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id))
-    return res.status(404).send(`No post with id: ${id}`);
+    return res.status(404).send(`No user with id: ${id}`);
 
   try {
     await User.findByIdAndDelete(id);
-    res.json("Post deleted successfully");
+    res.json("User deleted successfully");
   } catch (error) {
     res.json({ message: error.message });
   }
 };
 
-export default router;
+module.exports = { getUser, createUser, updateUser, deleteUser };
