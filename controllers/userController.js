@@ -1,10 +1,11 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const User = require("../models/user");
+const { async } = require("@firebase/util");
 
 const router = express.Router();
 
-const getUser = async (req, res) => {
+const getMongoUser = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -16,7 +17,7 @@ const getUser = async (req, res) => {
   }
 };
 
-const createUser = async (req, res) => {
+const createMongoUser = async (req, res) => {
   const { name, username, email, phoneNumber, address } = req.body;
 
   const newUser = new User({ name, username, email, phoneNumber, address });
@@ -30,7 +31,7 @@ const createUser = async (req, res) => {
   }
 };
 
-const updateUser = async (req, res) => {
+const updateMongoUser = async (req, res) => {
   const { id } = req.params;
   const { name, username, email, phoneNumber, address } = req.body;
 
@@ -48,7 +49,7 @@ const updateUser = async (req, res) => {
   }
 };
 
-const deleteUser = async (req, res) => {
+const deleteMongoUser = async (req, res) => {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id))
@@ -62,4 +63,21 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { getUser, createUser, updateUser, deleteUser };
+const getFirebaseUser = async (req, res) => {};
+
+const createFirebaseUser = async (req, res) => {};
+
+const updateFirebaseUser = async (req, res) => {};
+
+const deleteFirebaseUser = async (req, res) => {};
+
+module.exports = {
+  getMongoUser,
+  createMongoUser,
+  updateMongoUser,
+  deleteMongoUser,
+  getFirebaseUser,
+  createFirebaseUser,
+  updateFirebaseUser,
+  deleteFirebaseUser,
+};
