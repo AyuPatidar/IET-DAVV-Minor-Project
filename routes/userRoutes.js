@@ -22,7 +22,7 @@ router.delete("/mongo/:id", deleteMongoUser);
 router.post("/firebase", createFirebaseUser);
 router.get("/firebase/:id", getFirebaseUser);
 router.patch("/firebase/:id", updateFirebaseUser);
-router.delete("firebase/:id", deleteFirebaseUser);
+router.delete("/firebase/:id", deleteFirebaseUser);
 
 // export routes
 module.exports = router;

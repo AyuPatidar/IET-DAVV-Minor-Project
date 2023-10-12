@@ -94,7 +94,7 @@ const createFirebaseUser = async (req, res) => {
     // add user json object to collection
     const fbResponse = db.collection("users").add(user);
     // return created user
-    res.send(fbResponse);
+    res.json(fbResponse);
   } catch (error) {
     res.json({ message: error.message });
   }
@@ -102,7 +102,14 @@ const createFirebaseUser = async (req, res) => {
 
 // Read Firebase user
 const getFirebaseUser = async (req, res) => {
+  // fetch id of user from req params
+  const { id } = req.params;
   try {
+    // get user from collection
+    const userRef = db.collection("users").doc(id);
+    const fbresponse = await userRef.get();
+    // return user
+    res.json(fbresponse.data());
   } catch (error) {
     res.json({ message: error.message });
   }
@@ -110,7 +117,18 @@ const getFirebaseUser = async (req, res) => {
 
 // update firebase user
 const updateFirebaseUser = async (req, res) => {
+  // extract id from req params
+  const { id } = req.params;
+  // extract user details from req body
+  const { name, username, email, phoneNumber, address } = req.body;
   try {
+    // create user json object
+    const user = { name, username, email, phoneNumber, address };
+    // update user details in collection
+    const userRef = db.collection("users").doc(id).update(user);
+    const fbresponse = await userRef;
+    // return updated user
+    res.json(fbresponse);
   } catch (error) {
     res.json({ message: error.message });
   }
@@ -118,7 +136,12 @@ const updateFirebaseUser = async (req, res) => {
 
 // delete firebase user
 const deleteFirebaseUser = async (req, res) => {
+  // extract id from req params
+  const { id } = req.params;
   try {
+    // delete user from users collection
+    const fbresponse = await db.collection("users").doc(id).delete();
+    res.json(fbresponse);
   } catch (error) {
     res.json({ message: error.message });
   }
