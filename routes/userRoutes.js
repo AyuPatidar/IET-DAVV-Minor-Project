@@ -1,3 +1,4 @@
+// imports
 const express = require("express");
 const {
   getMongoUser,
@@ -10,8 +11,10 @@ const {
   deleteFirebaseUser,
 } = require("../controllers/userController");
 
+// initialize router
 const router = express.Router();
 
+// define routes
 router.post("/mongo", createMongoUser);
 router.get("/mongo/:id", getMongoUser);
 router.patch("/mongo/:id", updateMongoUser);
@@ -21,4 +24,5 @@ router.get("/firebase/:id", getFirebaseUser);
 router.patch("/firebase/:id", updateFirebaseUser);
 router.delete("firebase/:id", deleteFirebaseUser);
 
+// export routes
 module.exports = router;
