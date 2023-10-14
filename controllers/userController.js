@@ -2,24 +2,22 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const User = require("../models/user");
-// const { async } = require("@firebase/util");
 const admin = require("firebase-admin");
 const credentials = require("../key.json");
 
-// imitialize router
-const router = express.Router();
+const router = express.Router(); // imitialize router
 
 // Create MongoDB User
 const createMongoUser = async (req, res) => {
-  // fetch user details from request body
-  const { name, username, email, phoneNumber, address } = req.body;
-  // create user json object based on user model
-  const newUser = new User({ name, username, email, phoneNumber, address });
+  console.log("MongoDB Create User");
+  const { name, username, email, phoneNumber, address } = req.body; // fetch user details from request body
+  start = performance.now(); // start time
+  const newUser = new User({ name, username, email, phoneNumber, address }); // create user json object based on user model
   try {
-    // add user to collection
-    await newUser.save();
-    // return user
-    res.json(newUser);
+    await newUser.save(); // add user to collection
+    end = performance.now(); // end time
+    console.log(end - start); // total time taken in milliseconds = end - start
+    res.json(newUser); // return user
   } catch (error) {
     res.json({ message: error.message });
   }
@@ -27,13 +25,14 @@ const createMongoUser = async (req, res) => {
 
 // Read MongoDB User
 const getMongoUser = async (req, res) => {
-  // Fetch user id from req params
-  const { id } = req.params;
+  console.log("MongoDB Read User");
+  const { id } = req.params; // Fetch user id from req params
   try {
-    // find user doc in collection
-    const user = await User.findById(id);
-    // return user
-    res.json(user);
+    start = performance.now(); // start time
+    const user = await User.findById(id); // find user doc in collection
+    end = performance.now(); // end time
+    console.log(end - start); // total time taken in milliseconds = end - start
+    res.json(user); // return user
   } catch (error) {
     res.json({ message: error.message });
   }
@@ -41,20 +40,19 @@ const getMongoUser = async (req, res) => {
 
 // Update MongoDB User
 const updateMongoUser = async (req, res) => {
-  // fetch user id from req params
-  const { id } = req.params;
-  // fetch user details from req body
-  const { name, username, email, phoneNumber, address } = req.body;
+  console.log("MongoDB Update User");
+  const { id } = req.params; // fetch user id from req params
+  const { name, username, email, phoneNumber, address } = req.body; // fetch user details from req body
+  start = performance.now(); // start time
   // check if user id is valid and present
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.send(`No user with id: ${id}`);
   try {
-    // create user json object based on user model
-    const updatedUser = { name, username, email, phoneNumber, address };
-    // find the user and update the doc
-    await User.findByIdAndUpdate(id, updatedUser);
-    // return updated user
-    res.json(updatedUser);
+    const updatedUser = { name, username, email, phoneNumber, address }; // create user json object based on user model
+    await User.findByIdAndUpdate(id, updatedUser); // find the user and update the doc
+    end = performance.now(); // end time
+    console.log(end - start); // total time taken in milliseconds
+    res.json(updatedUser); // return updated user
   } catch (error) {
     res.json({ message: error.message });
   }
@@ -62,16 +60,17 @@ const updateMongoUser = async (req, res) => {
 
 // Delete MongoDB User
 const deleteMongoUser = async (req, res) => {
-  // fetch id from req params
-  const { id } = req.params;
+  console.log("MongoDB Delete User");
+  const { id } = req.params; // fetch id from req params
+  start = performance.now(); // start time
   // check if user id is valid and present
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.send(`No user with id: ${id}`);
   try {
-    // find user and delete the doc
-    await User.findByIdAndDelete(id);
-    // return deleted message
-    res.json("User deleted successfully");
+    await User.findByIdAndDelete(id); // find user and delete the doc
+    end = performance.now(); // end time
+    console.log(end - start); // total time taken in milliseconds
+    res.json("User deleted successfully"); // return deleted message
   } catch (error) {
     res.json({ message: error.message });
   }
@@ -86,15 +85,15 @@ const db = admin.firestore();
 
 // Create Firebase User
 const createFirebaseUser = async (req, res) => {
-  // fetch user details from req body
-  const { name, username, email, phoneNumber, address } = req.body;
+  console.log("Firebase Create User");
+  const { name, username, email, phoneNumber, address } = req.body; // fetch user details from req body
   try {
-    // create user json object
-    const user = { name, username, email, phoneNumber, address };
-    // add user json object to collection
-    const fbResponse = db.collection("users").add(user);
-    // return created user
-    res.json(fbResponse);
+    const user = { name, username, email, phoneNumber, address }; // create user json object
+    start = performance.now(); // start time
+    const fbResponse = db.collection("users").add(user); // add user json object to collection
+    end = performance.now(); // end time
+    console.log(end - start); // total time taken in milliseconds
+    res.json(fbResponse); // return created user
   } catch (error) {
     res.json({ message: error.message });
   }
@@ -102,14 +101,16 @@ const createFirebaseUser = async (req, res) => {
 
 // Read Firebase user
 const getFirebaseUser = async (req, res) => {
-  // fetch id of user from req params
-  const { id } = req.params;
+  console.log("Firebase Read User");
+  const { id } = req.params; // fetch id of user from req params
   try {
+    start = performance.now(); // start time
     // get user from collection
     const userRef = db.collection("users").doc(id);
     const fbresponse = await userRef.get();
-    // return user
-    res.json(fbresponse.data());
+    end = performance.now(); // end time
+    console.log(end - start); // total time taken in milliseconds
+    res.json(fbresponse.data()); // return user
   } catch (error) {
     res.json({ message: error.message });
   }
@@ -117,18 +118,18 @@ const getFirebaseUser = async (req, res) => {
 
 // update firebase user
 const updateFirebaseUser = async (req, res) => {
-  // extract id from req params
-  const { id } = req.params;
-  // extract user details from req body
-  const { name, username, email, phoneNumber, address } = req.body;
+  console.log("Firebase Update User");
+  const { id } = req.params; // extract id from req params
+  const { name, username, email, phoneNumber, address } = req.body; // extract user details from req body
   try {
-    // create user json object
-    const user = { name, username, email, phoneNumber, address };
+    const user = { name, username, email, phoneNumber, address }; // create user json object
+    start = performance.now(); // start time
     // update user details in collection
     const userRef = db.collection("users").doc(id).update(user);
     const fbresponse = await userRef;
-    // return updated user
-    res.json(fbresponse);
+    end = performance.now(); // end time
+    console.log(end - start); // total time taken in milliseconds
+    res.json(fbresponse); // return updated user
   } catch (error) {
     res.json({ message: error.message });
   }
@@ -136,11 +137,13 @@ const updateFirebaseUser = async (req, res) => {
 
 // delete firebase user
 const deleteFirebaseUser = async (req, res) => {
-  // extract id from req params
-  const { id } = req.params;
+  console.log("Firebase Delete User");
+  const { id } = req.params; // extract id from req params
   try {
-    // delete user from users collection
-    const fbresponse = await db.collection("users").doc(id).delete();
+    start = performance.now(); // start time
+    const fbresponse = await db.collection("users").doc(id).delete(); // delete user from users collection
+    end = performance.now(); // end time
+    console.log(end - start); // total time taken in milliseconds
     res.json(fbresponse);
   } catch (error) {
     res.json({ message: error.message });
