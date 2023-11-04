@@ -50,7 +50,7 @@ const createMultipleMongoUsers = async (req, res) => {
   console.log("MongoDB Create Multiple User");
   const usersArray = req.body; // fetch user details from request body
   try {
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 200; i++) {
       var newUser = new User({
         user_id: usersArray[i]["User ID"],
         subscription_type: usersArray[i]["Subscription Type"],
@@ -196,7 +196,7 @@ const createMultipleFirebaseUser = async (req, res) => {
   console.log("Firebase Create Multiple Users");
   const usersArray = req.body;
   try {
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 200; i++) {
       var user = {
         user_id: usersArray[i]["User ID"],
         subscription_type: usersArray[i]["Subscription Type"],
