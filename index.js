@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const userRoutes = require("./routes/userRoutes.js");
 const medRoutes = require("./routes/medRoutes.js");
+const accidentRoutes = require("./routes/accidentRoutes.js");
 
 // initialize app
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 // use routes
 app.use("/api/v1/user/", userRoutes);
 app.use("/api/v1/med/", medRoutes);
+app.use("/api/v1/accident/", accidentRoutes);
 
 // connect database and then run server
 mongoose
