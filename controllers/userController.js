@@ -2,8 +2,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const User = require("../models/user");
-const admin = require("firebase-admin");
-const credentials = require("../key.json");
 
 const router = express.Router(); // imitialize router
 
@@ -50,7 +48,7 @@ const createMultipleMongoUsers = async (req, res) => {
   console.log("MongoDB Create Multiple User");
   const usersArray = req.body; // fetch user details from request body
   try {
-    for (var i = 0; i < 200; i++) {
+    for (var i = 0; i < 10; i++) {
       var newUser = new User({
         user_id: usersArray[i]["User ID"],
         subscription_type: usersArray[i]["Subscription Type"],
@@ -146,13 +144,6 @@ const deleteMongoUser = async (req, res) => {
   }
 };
 
-// initialize the firebase app
-admin.initializeApp({
-  credential: admin.credential.cert(credentials),
-});
-// connect to firestore
-const db = admin.firestore();
-
 // Create Firebase User
 // Single User
 const createFirebaseUser = async (req, res) => {
@@ -196,7 +187,7 @@ const createMultipleFirebaseUser = async (req, res) => {
   console.log("Firebase Create Multiple Users");
   const usersArray = req.body;
   try {
-    for (var i = 0; i < 200; i++) {
+    for (var i = 0; i < 10; i++) {
       var user = {
         user_id: usersArray[i]["User ID"],
         subscription_type: usersArray[i]["Subscription Type"],

@@ -2,8 +2,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Med = require("../models/med");
-const admin = require("firebase-admin");
-const credentials = require("../key.json");
+const db = require("../config/db");
 
 const router = express.Router(); // initialize router
 
@@ -42,7 +41,7 @@ const createMultipleMongoRecords = async (req, res) => {
   console.log("MongoDB Create Multiple Record");
   const recordsArray = req.body; // fetch user details from request body
   try {
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 20; i++) {
       var newRecord = new Med({
         serial_no: recordsArray[i]["serial_no"],
         description: recordsArray[i]["description"],
@@ -126,13 +125,6 @@ const deleteMongoRecord = async (req, res) => {
   }
 };
 
-// initialize the firebase app
-admin.initializeApp({
-  credential: admin.credential.cert(credentials),
-});
-// connect to firestore
-const db = admin.firestore();
-
 // Create Firebase Record
 // Single Record
 const createFirebaseRecord = async (req, res) => {
@@ -168,7 +160,7 @@ const createMultipleFirebaseRecord = async (req, res) => {
   console.log("Firebase Create Multiple Records");
   const recordsArray = req.body;
   try {
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 20; i++) {
       var record = {
         serial_no: recordsArray[i]["serial_no"],
         description: recordsArray[i]["description"],
