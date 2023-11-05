@@ -42,7 +42,7 @@ const createMultipleMongoRecords = async (req, res) => {
   console.log("MongoDB Create Multiple Record");
   const recordsArray = req.body; // fetch user details from request body
   try {
-    for (var i = 0; i < 200; i++) {
+    for (var i = 0; i < 3; i++) {
       var newRecord = new Med({
         serial_no: recordsArray[i]["serial_no"],
         description: recordsArray[i]["description"],
@@ -168,14 +168,14 @@ const createMultipleFirebaseRecord = async (req, res) => {
   console.log("Firebase Create Multiple Records");
   const recordsArray = req.body;
   try {
-    for (var i = 0; i < 200; i++) {
+    for (var i = 0; i < 3; i++) {
       var record = {
-        serial_no: recordsArray[i][""],
-        description: recordsArray[i][""],
-        medical_specialty: recordsArray[i][""],
-        sample_name: recordsArray[i][""],
-        transcription: recordsArray[i][""],
-        keywords: recordsArray[i][""],
+        serial_no: recordsArray[i]["serial_no"],
+        description: recordsArray[i]["description"],
+        medical_specialty: recordsArray[i]["medical_specialty"],
+        sample_name: recordsArray[i]["sample_name"],
+        transcription: recordsArray[i]["transcription"],
+        keywords: recordsArray[i]["keywords"],
       };
       const fbResponse = db.collection("med").add(record);
     }
